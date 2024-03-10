@@ -1,24 +1,34 @@
 <!-- disp.wxml -->
 <scroll-view class="scrollarea" scroll-y type="list">
+    
     <view class="container">
-        <view class="cityselector">
+        <view class="cityselector card">
             <t-cell class="mb-16" title="选择城市" arrow hover note="{{cityText}}" bind:click="onCityPicker" />
             <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="city" title="选择城市" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
                 <t-picker-item options="{{citys}}" />
             </t-picker>
         </view>
-        <view class='overall'>
-            <t-row>
-                <t-col>
-                    <t-progress theme="circle" percentage="88" status="success" class="overallcircle" />
-                </t-col>
-            </t-row>
-            <t-row>
-                <view class='text'>现在的情况很好啊</view>
-            </t-row>
+        <view class='overall card'>
+            <view class='title'>情况总览</view>
+            <view class='circles'>
+                    <view class="overallcircle">
+                    <t-progress theme="circle" percentage="54" label='中等' color="orange"  >
+                        
+                        </t-progress>
+                        所在地感染风险
+                        </view>
+                    <view class="overallcircle">
+                    <t-progress theme="circle" percentage="20" label='较低' color='blue'  >
+                        
+                        </t-progress>
+                        所在场所感染风险
+                        </view>
+            </view>
+                
         </view>
-        <view class='showdetail'>
-            <t-tabs defaultValue="{{0}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs" t-class-content="custom-panel">
+        <t-divider/>
+        <view class='showdetail card'>
+            <t-tabs defaultValue="{{2}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs" t-class-content="custom-panel">
                 <t-tab-panel label="哨点信息" value="0" style="{{tabPanelstyle}}">123</t-tab-panel>
                 <t-tab-panel label="省份信息" value="1" style="{{tabPanelstyle}}">123</t-tab-panel>
                 <t-tab-panel label="场所信息" value="2" style="{{tabPanelstyle}}">
@@ -38,11 +48,11 @@
                     </t-row>
                     <t-row>
                         <t-col span="12" class="detailcard">
-                            <view class="roomdata">col-8</view>
+                            <view class="roomdata">较低</view>
                             <view class="dataname">感染风险值</view>
                         </t-col>
                         <t-col span="12" class="detailcard">
-                            <view class="roomdata">col-8</view>
+                            <view class="roomdata">中等</view>
                             <view class="dataname">防范等级</view>
                         </t-col>
                     </t-row>

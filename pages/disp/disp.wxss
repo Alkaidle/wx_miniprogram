@@ -1,78 +1,113 @@
 .custom-tabs {
-  margin-bottom: 32rpx;
-  width: 100%;
-  margin-left: 0;
-  padding: 0%;
-  background-color: blue;
-  
-}
-.container
-{
+    margin-bottom: 32rpx;
+    width: 100%;
+    margin-left: 0;
     padding: 0%;
-}
-.overall
-{
-    display: flex;
-    margin: 5%;
-    padding: 5%;
-    width: 100%;
     background-color: blue;
-    justify-content:center;
-    flex-direction: column;
-    align-items: center;
-}
-.overallcircle
-{
-    width: 100%;
-}
-.custom-panel {
-  height: auto;
-  background-color: red;
-}
-.showdetail
-{
-    margin: 5%;
-    padding: 5%;
-    width: 100%;
-    background-color: aqua;
-    border-radius: 8%;
-    overflow: hidden;
-    box-shadow: lightgray 0cm 0.05cm 0.4cm 0.1cm;
+
 }
 .scrollarea
 {
+    background-color: rgb(105, 239, 194);
+}
+.container {
+    padding: 0%;
+    background-color: rgb(105, 239, 194);
+
+    --td-divider-color:black;
+
+}
+
+.overall {
+    display: flex;
+    margin: 5%;
+    padding: 0%;
+    width: 100%;
+    background-color: whitesmoke;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+.title
+{
+    font-size: large;
+    font-weight: bold;
+    text-align: left;
+    background-color: transparent;
+    width: 100%;
+    margin-left: 5%;
+    margin-top: 1%;
+}
+.overallcircle {
+    display: flex;
+    flex-direction: column;
+    width: 350rpx;
+    background-color: transparent;
+    margin: 3%;
+    padding: 0%;
+    flex:1;
+    align-items: center;
+    font-size: small;
+    color: gray;
+}
+.circles
+{
+    display: flex;
+    justify-content: space-around;
+}
+.custom-panel {
+    height: auto;
+    background-color: whitesmoke;
+}
+
+.showdetail {
+    margin: 5%;
+    margin-top: 0%;
+    padding: 0%;
+    background-color: whitesmoke;
+}
+
+.scrollarea {
     background-color: antiquewhite;
 }
-.detailcard
-{
+
+.detailcard {
     background-color: transparent;
-    padding-bottom:2%;
+    padding-bottom: 2%;
     padding-top: 2.4%;
     text-align: center;
 }
-.roomdata
-{
+
+.roomdata {
     margin: 5%;
     font-size: 180%;
-    vertical-align:middle;
+    vertical-align: middle;
 }
-.dataname
-{
+
+.dataname {
     margin: 0%;
     color: gray;
     vertical-align: sub;
     background-color: transparent;
     padding: 0%;
 }
-.mb-16 {
-  }
-  .cityselector
-  {
-    margin: 1%;
-    background-color: blueviolet; 
-    width: 100%;
-    border-radius: 2.4%;
-    overflow: hidden;
-    box-shadow: lightgray 0cm 0.05cm 0.4cm 0.1cm;
-  }
 
+.mb-16 {
+    
+}
+
+.cityselector {
+    margin: 1%;
+    background-color: blueviolet;
+    --td-cell-height:100rpx;
+    
+    
+}
+.card
+{
+    box-shadow: rgba(83, 83, 83, 0.556) 0cm 0.05cm 0.15cm 0.05cm;
+    overflow: hidden;
+    border-radius:0.18cm;
+    width: 96%;
+}
