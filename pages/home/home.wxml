@@ -11,8 +11,8 @@
     </text>
   </view>
   <view class="text-box-ofRegion">
-    <view >
-        <text >{{province}} {{city}}</text>
+    <view>
+        <text>{{province}} {{city}}</text>
     </view>
   </view>
 </view>
@@ -31,5 +31,11 @@
       所在场所感染风险
       </text>
     </view>
+  </view>
+</view>
+<view>
+  <view>
+    <text>温度：{{temperature}} 湿度：{{humidity}} 二氧化碳浓度：{{CO2}}</text>
+    <text>datas:{{datas}}</text>
   </view>
 </view>

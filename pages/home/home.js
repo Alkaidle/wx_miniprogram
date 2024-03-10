@@ -1,6 +1,10 @@
 const app=getApp();
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
+const base64=require('../../utils/base64.modified.js');
 var qqmapsdk;
+const appKey='Ud_t9LASR';
+const appSecret='a3be567dde8811ee8fe012c7de235200';
+const tokenEndpoint='https://oauth.cleargrass.com/oauth2/token';
 Page({
     data: {
         border: {
@@ -10,6 +14,11 @@ Page({
         city: '',
         latitude: '',
         longitude: '',
+        total: '',
+        temperature: '',
+        humidity: '',
+        CO2: '',
+        datas: {},
     },
     onLoad: function() {
         qqmapsdk=new QQMapWX({
@@ -19,6 +28,7 @@ Page({
     onShow: function() {
         let _this=this;
         _this.getUserLocation();
+        _this.getAccessToken();
     },
     getUserLocation: function() {
         let _this=this;
@@ -112,6 +122,57 @@ Page({
             },
             complete: function (res) {
                 // console.log(res);
+            }
+        });
+    },
+    getAccessToken: function() {
+        let _this=this;
+        wx.request({
+            url: tokenEndpoint,
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Basic ' + base64.encode(appKey + ':' + appSecret),
+            },
+            data: {
+                grant_type: 'client_credentials'
+            },
+            success: function(res) {
+                var accessToken=res.data.access_token;
+                _this.getData(accessToken);
+                console.log('getAccessToken Success!');
+            },
+            fail: function(err) {
+                console.error('Failed to get Access Token:', err);
+            }
+        })
+    },
+    getData: function(accessToken) {
+        let _this=this;
+        wx.request({
+            url: 'https://apis.cleargrass.com/v1/apis/devices',
+            header: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+            success: function(res) {
+                //var devicesObj=JSON.parse(res.devices);
+                console.log('res:' + typeof res);
+                console.log('res.data:' + typeof res.data);
+                console.log('res.data.temperature:' + typeof res.data.temperature);
+                console.log('res.data.humidity:' + typeof res.data.humidity);
+                let temperature=res.data.temperature.value;
+                let humidity=res.data.humidity.value;
+                let CO2=res.data.co2.value;
+                _this.setData({
+                    datas: res.data,
+                    temperature: temperature,
+                    humidity: humidity,
+                    CO2: CO2,
+                });
+                console.log('getData Success!');
+            },
+            fail: function(err) {
+                console.error('Request failed:',err);
             }
         });
     }
