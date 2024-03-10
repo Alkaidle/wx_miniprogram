@@ -1,0 +1,56 @@
+.block {
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 120rpx;
+    width: 800rpx;
+    height: 420rpx;
+}
+
+.region {
+  display: flex;
+  flex-direction: row;
+  margin: 20rpx;
+  border: 2rpx solid #000;
+}
+
+.text-box-ofRegion {
+  margin: 5rpx;
+  border: 2rpx solid #000;
+}
+
+.outer-box {
+  flex-direction: column;
+  height: 400rpx;
+  padding: 20rpx;
+  border: 2rpx solid #000;
+  border-radius: 30rpx;
+  margin: 20rpx;
+}
+
+.inner-box1 {
+  height: 40%;
+  border: 2rpx solid #000;
+  margin: 3rpx;
+  margin-bottom: 20rpx;
+}
+
+.inner-box2 {
+  height: 40%;
+  border: 2rpx solid #000;
+  margin: 3rpx;
+  margin-top: 20rpx;
+}
+
+.separator {
+  width: 90%;
+  height: 1rpx;
+  margin: 3rpx auto;
+  background-color: #9a9999;
+}
+
+.text-box-ofRisk {
+  margin: 8rpx;
+  border: 2rpx solid #000;
+  width: 50%;
+  font-size: 110%;
+}

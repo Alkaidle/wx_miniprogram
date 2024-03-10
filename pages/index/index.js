@@ -11,10 +11,6 @@ Page({
     hasUserInfo: false,
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
-    location:{
-        latitude,
-        longitude,
-    },
     },
   bindViewTap() {
     wx.navigateTo({
@@ -36,24 +32,24 @@ Page({
       "userInfo.nickName": nickName,
       hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
     })
-    wx.authorize({
-        scope: 'scope.userLocation',
-        success(res) {
-          // 用户同意获取地理位置信息
-          this.setData({
-            "location.latitude": res.latitude,
-            "location.longitude": res.longitude,
-          })
-          wx.showToast({
-            title: '已登录',
-            icon: 'success',
-            duration: 1500
-        })
-        },
-        fail() {
-          // 用户拒绝获取地理位置信息，可以给出相应提示
-        }
-      })
+    // wx.authorize({
+    //     scope: 'scope.userLocation',
+    //     success(res) {
+    //       // 用户同意获取地理位置信息
+    //       this.setData({
+    //         "location.latitude": res.latitude,
+    //         "location.longitude": res.longitude,
+    //       })
+    //       wx.showToast({
+    //         title: '已登录',
+    //         icon: 'success',
+    //         duration: 1500
+    //     })
+    //     },
+    //     fail() {
+    //       // 用户拒绝获取地理位置信息，可以给出相应提示
+    //     }
+    //   })
   },
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗

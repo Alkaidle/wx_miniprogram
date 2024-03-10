@@ -1,0 +1,35 @@
+<!-- <view class="block">
+  <t-grid border="{{border}}" column="{{2}}" align="left" theme="card">
+    <t-grid-item text="所在地区感染风险" description="描述文字" layout="horizontal" image="{{img1}}" />
+    <t-grid-item text="所在场所感染风险" description="描述文字" layout="horizontal" image="{{img2}}" />
+  </t-grid>
+</view> -->
+<view class="region">
+  <view class="text-box-ofRegion">
+    <text>
+      您所在的地区：
+    </text>
+  </view>
+  <view class="text-box-ofRegion">
+    <view >
+        <text >{{province}} {{city}}</text>
+    </view>
+  </view>
+</view>
+<view class="outer-box">
+  <view class="inner-box1">
+    <view class="text-box-ofRisk">
+      <text>
+      所在地感染风险
+      </text>
+    </view>
+  </view>
+  <view class="separator"></view>
+  <view class="inner-box2">
+    <view class="text-box-ofRisk">
+      <text>
+      所在场所感染风险
+      </text>
+    </view>
+  </view>
+</view>

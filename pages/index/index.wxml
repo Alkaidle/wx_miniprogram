@@ -20,10 +20,6 @@
         <text class="userinfo-nickname">{{userInfo.nickName}}</text>
       </block>
     </view>
-    <view class="location">
-        <view>纬度:{{location.latitude}}</view>
-        <view>经度:{{location.longitude}}</view>
-    </view>
     <view class="usermotto">
       <text class="user-motto">{{motto}}</text>
     </view>
