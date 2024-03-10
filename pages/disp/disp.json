@@ -1,0 +1,15 @@
+{
+    "component": true,
+    "usingComponents": {
+      "t-row": "tdesign-miniprogram/row/row",
+      "t-col": "tdesign-miniprogram/col/col",
+      "t-tabs": "tdesign-miniprogram/tabs/tabs",
+        "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+        "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",
+        "t-progress": "tdesign-miniprogram/progress/progress",
+        "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+        "t-picker": "tdesign-miniprogram/picker/picker",
+        "t-picker-item": "tdesign-miniprogram/picker-item/picker-item"
+    }
+}

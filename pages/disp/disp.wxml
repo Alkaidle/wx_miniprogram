@@ -1,0 +1,53 @@
+<!-- disp.wxml -->
+<scroll-view class="scrollarea" scroll-y type="list">
+    <view class="container">
+        <view class="cityselector">
+            <t-cell class="mb-16" title="选择城市" arrow hover note="{{cityText}}" bind:click="onCityPicker" />
+            <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="city" title="选择城市" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
+                <t-picker-item options="{{citys}}" />
+            </t-picker>
+        </view>
+        <view class='overall'>
+            <t-row>
+                <t-col>
+                    <t-progress theme="circle" percentage="88" status="success" class="overallcircle" />
+                </t-col>
+            </t-row>
+            <t-row>
+                <view class='text'>现在的情况很好啊</view>
+            </t-row>
+        </view>
+        <view class='showdetail'>
+            <t-tabs defaultValue="{{0}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs" t-class-content="custom-panel">
+                <t-tab-panel label="哨点信息" value="0" style="{{tabPanelstyle}}">123</t-tab-panel>
+                <t-tab-panel label="省份信息" value="1" style="{{tabPanelstyle}}">123</t-tab-panel>
+                <t-tab-panel label="场所信息" value="2" style="{{tabPanelstyle}}">
+                    <t-row>
+                        <t-col span="8" class="detailcard">
+                            <view class="roomdata">25℃</view>
+                            <view class="dataname">温度</view>
+                        </t-col>
+                        <t-col span="8" class="detailcard">
+                            <view class="roomdata">44%</view>
+                            <view class="dataname">湿度</view>
+                        </t-col>
+                        <t-col span="8" class="detailcard">
+                            <view class="roomdata">8888ppm</view>
+                            <view class="dataname">CO2浓度</view>
+                        </t-col>
+                    </t-row>
+                    <t-row>
+                        <t-col span="12" class="detailcard">
+                            <view class="roomdata">col-8</view>
+                            <view class="dataname">感染风险值</view>
+                        </t-col>
+                        <t-col span="12" class="detailcard">
+                            <view class="roomdata">col-8</view>
+                            <view class="dataname">防范等级</view>
+                        </t-col>
+                    </t-row>
+                </t-tab-panel>
+            </t-tabs>
+        </view>
+    </view>
+</scroll-view>
