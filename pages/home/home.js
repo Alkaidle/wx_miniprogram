@@ -125,6 +125,7 @@ Page({
             }
         });
     },
+    //////////////////////////////////////////////////////
     getAccessToken: function() {
         let _this=this;
         wx.request({
