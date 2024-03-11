@@ -50,6 +50,7 @@
     align-items: center;
     font-size: small;
     color: gray;
+    transition: 300ms;
 }
 .circles
 {
@@ -69,7 +70,7 @@
 }
 
 .scrollarea {
-    background-color: antiquewhite;
+    background-color: whitesmoke;
 }
 
 .detailcard {

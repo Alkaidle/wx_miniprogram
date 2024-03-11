@@ -1,7 +1,6 @@
 const app = getApp();
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
 var qqmapsdk;
-let mycity = '666';
 Component({
   //
   lifetimes: {
@@ -13,12 +12,26 @@ Component({
         key: 'H5KBZ-PHI34-BBJUW-KGWUO-T7LMO-Q4BY3'
       });
       this.getUserLocation();
+    },
+    ready()
+    {
+      this.setData
+      ({
+        place:{percentage:0,grade:'较低',color:'orange'},
+        room:{percentage:0,grade:'较低',color:'lime'}
+      });
+      this.setData
+      ({
+        place:{percentage:60,grade:'中等',color:'orange'},
+        room:{percentage:15,grade:'较低',color:'lime'}
+      })
     }
   },
 
   data: {
-    cityText: '',
+    cityText: '定位中',
     cityValue: [],
+    city: '6',
     citys: [
       { label: '北京市', value: '北京市' },
       { label: '上海市', value: '上海市' },
@@ -27,14 +40,20 @@ Component({
       { label: '成都市', value: '成都市' },
     ],
     province: '',
-    city: '',
+    footerText:'由 X-Hunter 创业项目研发',
+    footerText2:'场所信息由青萍开发者平台提供',
+    links:[
+      {name:'项目地址',url:''},
+      {name:'青萍开发者平台',url:''}],
+    place:{percentage:0,grade:'较低',color:'lime'},
+    room:{percentage:0,grade:'较低',color:'lime'}
   },
 
   methods: {
     onColumnChange(e) {
       console.log('picker pick:', e);
     },
-
+    
     onPickerChange(e) {
       const { key } = e.currentTarget.dataset;
       const { value } = e.detail;
@@ -145,8 +164,9 @@ Component({
           let city = res.result.ad_info.city
           _this.setData({
             province: province,
-            city: city
+            cityText: city
           })
+          return city;
         },
         fail: function (res) {
           console.log(res);
