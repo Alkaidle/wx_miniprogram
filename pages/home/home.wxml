@@ -33,9 +33,13 @@
     </view>
   </view>
 </view>
-<view>
-  <view>
+<view class="container">
+  <!-- <view>
     <text>温度：{{temperature}} 湿度：{{humidity}} 二氧化碳浓度：{{CO2}}</text>
     <text>datas:{{datas}}</text>
+  </view> -->
+  <view>
+    <text>Map:</text>
   </view>
+  <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{ecMap}}"></ec-canvas>
 </view>

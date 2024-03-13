@@ -1,3 +1,5 @@
+import * as echarts from '../../ec-canvas/echarts';
+import geoJson from './mapData.js';
 const app=getApp();
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
 const base64=require('../../utils/base64.modified.js');
@@ -12,13 +14,14 @@ Page({
         },
         province: '',
         city: '',
-        latitude: '',
-        longitude: '',
-        total: '',
-        temperature: '',
-        humidity: '',
-        CO2: '',
-        datas: {},
+        // total: '',
+        // temperature: '',
+        // humidity: '',
+        // CO2: '',
+        // datas: {},
+        ecMap: {
+            onInit: initChartMap
+        },
     },
     onLoad: function() {
         qqmapsdk=new QQMapWX({
@@ -27,8 +30,7 @@ Page({
     },
     onShow: function() {
         let _this=this;
-        _this.getUserLocation();
-        _this.getAccessToken();
+        //_this.getUserLocation();
     },
     getUserLocation: function() {
         let _this=this;
@@ -176,5 +178,158 @@ Page({
                 console.error('Request failed:',err);
             }
         });
-    }
+    },
 })
+///////////////////////////////////
+function randomData() {
+    return Math.round(Math.random()*10000);
+}
+
+function initChartMap(canvas, width, height) {
+    console.log("initChartMap!");
+    let myMap=echarts.init(canvas, null, {
+        width: width,
+        height: height
+    });
+    canvas.setChart(myMap);
+    echarts.registerMap('china',geoJson);
+    const option = {
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: "#FFF",
+          padding: [
+            10,  // 上
+            15, // 右
+            8,  // 下
+            15, // 左
+          ],
+        //   extraCssText: 'box-shadow: 2px 2px 10px rgba(21, 126, 245, 0.35);',
+        //   textStyle: {
+        //     fontFamily: "'Microsoft YaHei', Arial, 'Avenir', Helvetica, sans-serif",
+        //     color: '#005dff',
+        //     fontSize: 12,
+        //   },
+          formatter: `{b} :  {c}确诊`
+        },
+        geo: [
+          {
+            // 地理坐标系组件
+            map: "china",
+            roam: false, // 可以缩放和平移
+            aspectScale: 0.78, // 宽高比
+            layoutCenter: ["50%", "38%"], // position位置
+            layoutSize: 370, // 地图大小，保证了不超过 370x370 的区域
+            label: {
+              // 图形上的文本标签
+              normal: {
+                show: true,
+                textStyle: {
+                    color: "rgba(0, 0, 0, 0.9)",
+                    fontSize: '8.5',
+                    fontWeight: 'bold',
+                    textBorderColor: '#fff',
+                    textBorderWidth: 1,
+                }
+              },
+              emphasis: { // 高亮时样式
+                color: "#333"
+              }
+            },
+            itemStyle: {
+              // 图形上的地图区域
+              normal: {
+                borderColor: "rgba(0,0,0,0.2)",
+                areaColor: "#005dff"
+              }
+            }
+          }
+        ],
+        toolbox: {
+          show: true,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        visualMap: {
+          min: 800,
+          max: 50000,
+          text: ['High', 'Low'],
+          realtime: true,
+          calculable: false,
+          inRange: {
+            color: ['lightskyblue', 'yellow', 'orangered']
+          }
+        },
+        series: [
+          {
+            type: 'map',
+            mapType: 'china',
+            geoIndex: 0,
+            roam: false, // 鼠标是否可以缩放
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                  areaColor: '#fbfbfb',
+                  borderColor: '#b9b4b7'
+                },
+                emphasis: {
+                //   areaColor: '#389BB7',
+                  borderWidth: 0
+                }
+              },
+            animation: false,
+
+            data: [
+              { name: '北京', value: randomData() },
+              { name: '天津', value: randomData() },
+              { name: '上海', value: randomData() },
+              { name: '重庆', value: randomData() },
+              { name: '河北', value: randomData() },
+              { name: '河南', value: randomData() },
+              { name: '云南', value: randomData() },
+              { name: '辽宁', value: randomData() },
+              { name: '黑龙江', value: randomData() },
+              { name: '湖南', value: randomData() },
+              { name: '安徽', value: randomData() },
+              { name: '山东', value: randomData() },
+              { name: '新疆', value: randomData() },
+              { name: '江苏', value: randomData() },
+              { name: '浙江', value: randomData() },
+              { name: '江西', value: randomData() },
+              { name: '湖北', value: randomData() },
+              { name: '广西', value: randomData() },
+              { name: '甘肃', value: randomData() },
+              { name: '山西', value: randomData() },
+              { name: '内蒙古', value: randomData() },
+              { name: '陕西', value: randomData() },
+              { name: '吉林', value: randomData() },
+              { name: '福建', value: randomData() },
+              { name: '贵州', value: randomData() },
+              { name: '广东', value: randomData() },
+              { name: '青海', value: randomData() },
+              { name: '西藏', value: randomData() },
+              { name: '四川', value: randomData() },
+              { name: '宁夏', value: randomData() },
+              { name: '海南', value: randomData() },
+              { name: '台湾', value: randomData() },
+              { name: '香港', value: randomData() },
+              { name: '澳门', value: randomData() }
+            ]
+          }],
+      };
+    myMap.setOption(option);
+    console.log("init finish!");
+    return myMap;
+}

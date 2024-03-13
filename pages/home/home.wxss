@@ -54,3 +54,9 @@
   width: 50%;
   font-size: 110%;
 }
+
+#Chinese-map {
+  width: 90%;
+  padding-top: 20rpx;
+  height: 1000rpx;
+}
