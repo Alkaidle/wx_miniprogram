@@ -1,4 +1,6 @@
 const app = getApp();
+import * as echarts from '../../ec-canvas/echarts';
+import geoJson from './mapData.js';
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
 var qqmapsdk;
 Component({
@@ -13,47 +15,75 @@ Component({
       });
       this.getUserLocation();
     },
-    ready()
-    {
-      this.setData
-      ({
-        place:{percentage:0,grade:'较低',color:'orange'},
-        room:{percentage:0,grade:'较低',color:'lime'}
-      });
-      this.setData
-      ({
-        place:{percentage:60,grade:'中等',color:'orange'},
-        room:{percentage:15,grade:'较低',color:'lime'}
+    ready() {
+      let place0 = this.GetColorAndGrade(60);
+      let room0 = this.GetColorAndGrade(80);
+      this.setData({
+        room: room0,
+        place: place0
       })
     }
   },
 
   data: {
-    cityText: '定位中',
-    cityValue: [],
-    city: '6',
-    citys: [
+    tabvalue:0,
+    provinceText: '定位中',
+    provinceValue: [],
+    city: '',
+    provinces : [
       { label: '北京市', value: '北京市' },
       { label: '上海市', value: '上海市' },
-      { label: '广州市', value: '广州市' },
-      { label: '深圳市', value: '深圳市' },
-      { label: '成都市', value: '成都市' },
+      { label: '广东省', value: '广东省' },
+      { label: '江苏省', value: '江苏省' },
+      { label: '浙江省', value: '浙江省' },
+      { label: '山东省', value: '山东省' },
+      { label: '河南省', value: '河南省' },
+      { label: '河北省', value: '河北省' },
+      { label: '湖南省', value: '湖南省' },
+      { label: '湖北省', value: '湖北省' },
+      { label: '福建省', value: '福建省' },
+      { label: '安徽省', value: '安徽省' },
+      { label: '辽宁省', value: '辽宁省' },
+      { label: '吉林省', value: '吉林省' },
+      { label: '黑龙江省', value: '黑龙江省' },
+      { label: '陕西省', value: '陕西省' },
+      { label: '山西省', value: '山西省' },
+      { label: '云南省', value: '云南省' },
+      { label: '四川省', value: '四川省' },
+      { label: '江西省', value: '江西省' },
+      { label: '广西壮族自治区', value: '广西壮族自治区' },
+      { label: '内蒙古自治区', value: '内蒙古自治区' },
+      { label: '宁夏回族自治区', value: '宁夏回族自治区' },
+      { label: '甘肃省', value: '甘肃省' },
+      { label: '青海省', value: '青海省' },
+      { label: '新疆维吾尔自治区', value: '新疆维吾尔自治区' },
+      { label: '西藏自治区', value: '西藏自治区' },
+      { label: '台湾省', value: '台湾省' },
+      { label: '香港特别行政区', value: '香港特别行政区' },
+      { label: '澳门特别行政区', value: '澳门特别行政区' }
     ],
     province: '',
-    footerText:'由 X-Hunter 创业项目研发',
-    footerText2:'场所信息由青萍开发者平台提供',
-    links:[
-      {name:'项目地址',url:''},
-      {name:'青萍开发者平台',url:''}],
-    place:{percentage:0,grade:'较低',color:'lime'},
-    room:{percentage:0,grade:'较低',color:'lime'}
+    backTopTheme: 'round',
+    backTopText: '顶部',
+    footerText: '由 X-Hunter 创业项目研发',
+    footerText2: '场所信息由青萍开发者平台提供',
+    links: [
+      { name: '项目地址', url: '' },
+      { name: '青萍开发者平台', url: '' }],
+    place: { percentage: 0, grade: '较低', color: 'lime' },
+    room: { percentage: 0, grade: '较低', color: 'lime' },
+    ecMap: {
+      onInit: initChartMap
+    },
   },
-
+  properties: {
+    scrollTop: { type: Number, value: 0 },
+  },
   methods: {
     onColumnChange(e) {
       console.log('picker pick:', e);
     },
-    
+
     onPickerChange(e) {
       const { key } = e.currentTarget.dataset;
       const { value } = e.detail;
@@ -63,6 +93,7 @@ Component({
         [`${key}Visible`]: false,
         [`${key}Value`]: value,
         [`${key}Text`]: value.join(' '),
+        tabvalue:0
       });
     },
 
@@ -72,13 +103,42 @@ Component({
       console.log('picker1 cancel:');
       this.setData({
         [`${key}Visible`]: false,
+        tabvalue:0
       });
     },
 
     onCityPicker() {
-      this.setData({ cityVisible: true });
-    },
+      this.setData({ cityVisible: true,tabvalue:-1});
 
+    },
+    GetColorAndGrade: function (per) {
+      console.log("Color!");
+      let color = '';
+      let grade = '';
+      if (per <= 20) color = 'limegreen';
+      else if (per <= 50) color = 'limegreen';
+      else if (per <= 70) color = 'orange';
+      else color = 'red';
+      if (per <= 30) grade = '较低';
+      else if (per <= 70) grade = '中等';
+      else grade = '较高';
+      return {
+        percentage: per,
+        color: color,
+        grade: grade
+      };
+      
+
+    },
+    onTabsClick(event) {
+      console.log(`Click tab, tab-panel value is ${event.detail.value}.`);
+      this.setData({
+        tabvalue:event.detail.value
+      })
+    },
+    onToTop(e) {
+      console.log('backToTop', e);
+    },
     ///////////////
     getUserLocation: function () {
       let _this = this;
@@ -163,7 +223,7 @@ Component({
           let province = res.result.ad_info.province
           let city = res.result.ad_info.city
           _this.setData({
-            province: province,
+            provinceText: province,
             cityText: city
           })
           return city;
@@ -178,3 +238,158 @@ Component({
     },
   },
 });
+function randomData() {
+  return Math.round(Math.random()*10000);
+}
+
+function initChartMap(canvas, width, height) {
+  console.log("initChartMap!");
+  let myMap=echarts.init(canvas, null, {
+      width: width,
+      height: height
+  });
+  canvas.setChart(myMap);
+  echarts.registerMap('china',geoJson);
+  const option = {
+      tooltip: {
+        trigger: 'item',
+        backgroundColor: "#FFF",
+        padding: [
+          10,  // 上
+          15, // 右
+          8,  // 下
+          15, // 左
+        ],
+      //   extraCssText: 'box-shadow: 2px 2px 10px rgba(21, 126, 245, 0.35);',
+      //   textStyle: {
+      //     fontFamily: "'Microsoft YaHei', Arial, 'Avenir', Helvetica, sans-serif",
+      //     color: '#005dff',
+      //     fontSize: 12,
+      //   },
+        formatter: `{b} :  {c}确诊`
+      },
+      geo: [
+        {
+          // 地理坐标系组件
+          map: "china",
+          roam: false, // 可以缩放和平移
+          aspectScale: 0.78, // 宽高比
+          layoutCenter: ["50%", "40%"], // position位置
+          layoutSize: 280, // 地图大小，保证了不超过 370x370 的区域
+          label: {
+            // 图形上的文本标签
+            normal: {
+              show: true,
+              textStyle: {
+                  color: "rgba(0, 0, 0, 0.6)",
+                  fontSize: '8.4',
+                  fontWeight: 'bold',
+                  textBorderColor: '#bbb',
+                  textBorderWidth: 0.4,
+              }
+            },
+            emphasis: { // 高亮时样式
+              color: "#333"
+            }
+          },
+          itemStyle: {
+            // 图形上的地图区域
+            normal: {
+              borderColor: "rgba(0,0,0,0.2)",
+              areaColor: "#005dff"
+            }
+          }
+        }
+      ],
+      toolbox: {
+        show: false,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+          dataView: { readOnly: false },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      visualMap: {
+        min: 800,
+        max: 50000,
+        text: ['高', '低'],
+        realtime: true,
+        orient: 'horizontal',
+        left:'center',
+        top:'240',
+        calculable: false,
+        inRange: {
+          color: ['lightskyblue', 'yellow', 'orangered']
+        }
+      },
+      series: [
+        {
+          type: 'map',
+          mapType: 'china',
+          geoIndex: 0,
+          roam: false, // 鼠标是否可以缩放
+          label: {
+              normal: {
+                  show: true
+              },
+              emphasis: {
+                  show: true
+              }
+          },
+          itemStyle: {
+              normal: {
+                areaColor: '#fbfbfb',
+                borderColor: '#b9b4b7'
+              },
+              emphasis: {
+              //   areaColor: '#389BB7',
+                borderWidth: 0
+              }
+            },
+          animation: true,
+
+          data: [
+            { name: '北京', value: randomData() },
+            { name: '天津', value: randomData() },
+            { name: '上海', value: randomData() },
+            { name: '重庆', value: randomData() },
+            { name: '河北', value: randomData() },
+            { name: '河南', value: randomData() },
+            { name: '云南', value: randomData() },
+            { name: '辽宁', value: randomData() },
+            { name: '黑龙江', value: randomData() },
+            { name: '湖南', value: randomData() },
+            { name: '安徽', value: randomData() },
+            { name: '山东', value: randomData() },
+            { name: '新疆', value: randomData() },
+            { name: '江苏', value: randomData() },
+            { name: '浙江', value: randomData() },
+            { name: '江西', value: randomData() },
+            { name: '湖北', value: randomData() },
+            { name: '广西', value: randomData() },
+            { name: '甘肃', value: randomData() },
+            { name: '山西', value: randomData() },
+            { name: '内蒙古', value: randomData() },
+            { name: '陕西', value: randomData() },
+            { name: '吉林', value: randomData() },
+            { name: '福建', value: randomData() },
+            { name: '贵州', value: randomData() },
+            { name: '广东', value: randomData() },
+            { name: '青海', value: randomData() },
+            { name: '西藏', value: randomData() },
+            { name: '四川', value: randomData() },
+            { name: '宁夏', value: randomData() },
+            { name: '海南', value: randomData() },
+            { name: '台湾', value: randomData() },
+            { name: '香港', value: randomData() },
+            { name: '澳门', value: randomData() }
+          ]
+        }],
+    };
+  myMap.setOption(option);
+  console.log("init finish!");
+  return myMap;
+}

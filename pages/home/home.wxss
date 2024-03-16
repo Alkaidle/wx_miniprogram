@@ -57,6 +57,13 @@
 
 #Chinese-map {
   width: 90%;
-  padding-top: 20rpx;
+  padding-top: 0%;
   height: 1000rpx;
+  background-color: whitesmoke;
+}
+.map
+{
+  padding: 0%;
+  background-color: whitesmoke;
+  
 }
