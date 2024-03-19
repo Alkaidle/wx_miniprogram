@@ -1,3 +1,8 @@
+.custom-title
+{
+  --td-navbar-color: whitesmoke;
+  --td-navbar-bg-color: #336699;
+}
 .custom-tabs {
     margin-bottom: 32rpx;
     width: 100%;
@@ -12,7 +17,7 @@
 }
 .container {
     padding: 0%;
-    background-color: rgb(60, 125, 245);
+    background-color: #417fbd;
 
     --td-divider-color:black;
 
@@ -113,7 +118,7 @@
 
 .cityselector {
     margin: 1%;
-    background-color: blueviolet;
+    background-color: transparent;
     --td-cell-height:100rpx;
     
     

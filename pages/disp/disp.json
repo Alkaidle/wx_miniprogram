@@ -17,7 +17,8 @@
         "ec-canvas": "../../ec-canvas/ec-canvas",
         "t-icon": "tdesign-miniprogram/icon/icon",
         "t-back-top": "tdesign-miniprogram/back-top/back-top",
-        "t-textarea": "tdesign-miniprogram/textarea/textarea"
+        "t-textarea": "tdesign-miniprogram/textarea/textarea",
+        "t-sticky": "tdesign-miniprogram/sticky/sticky"
       
     }
 }

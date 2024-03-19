@@ -1,100 +1,129 @@
 <!-- disp.wxml -->
 <scroll-view class="scrollarea" scroll-y type="list">
-    <t-back-top theme="{{backTopTheme}}" text="{{backTopText}}" scroll-top="{{scrollTop}}" bind:to-top="onToTop"></t-back-top>
-    <view class="container">
-        <view class="cityselector card">
-            <t-cell class="mb-16" title="我的省份" arrow hover note="{{provinceText}}" bind:click="onCityPicker" />
-            <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="province" title="选择省份" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
-                <t-picker-item options="{{provinces}}" />
-            </t-picker>
+  <t-navbar class="custom-title">
+  <view slot="left" >X-Hunter 风险仪表盘</view>
+</t-navbar>
+  <t-back-top theme="{{backTopTheme}}" text="{{backTopText}}" scroll-top="{{scrollTop}}" bind:to-top="onToTop"></t-back-top>
+  <view class="container">
+  
+    <t-sticky class="cityselector card" offset-top="{{ 88 }}">
+    <view >
+      
+      <t-cell class="mb-16" title="我的省份" arrow hover note="{{provinceText}}" bind:click="onCityPicker" />
+      <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="province" title="选择省份" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
+        <t-picker-item options="{{provinces}}" />
+      </t-picker>
+    
+    </view>
+  </t-sticky>
+  
+    <view class='overall card'>
+      <view class='title'>
+        <t-cell title="情况总览" leftIcon='check-circle' />
+      </view>
+      <view class='circles'>
+        <view class="overallcircle">
+          <t-progress theme="circle" percentage='{{place.percentage}}' label='{{place.grade}}' color='{{place.color}}' stroke-width='1px'></t-progress>
+          所在地感染风险
         </view>
-        <view class='overall card'>
-            <view class='title'>
-                <t-cell title="情况总览" leftIcon='check-circle' />
-            </view>
-            <view class='circles'>
-                <view class="overallcircle">
-                    <t-progress theme="circle" percentage='{{place.percentage}}' label='{{place.grade}}' color='{{place.color}}' stroke-width='1px'></t-progress>
-                    所在地感染风险
-                </view>
-                <view class="overallcircle">
-                    <t-progress theme="circle" percentage='{{room.percentage}}' label='{{room.grade}}' color='{{room.color}}' stroke-width='1px'></t-progress>
-                    所在场所感染风险
-                </view>
-            </view>
-            <t-cell title="提示" leftIcon='notification' />
-            <view class='overalladvice'>
-                <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较高.\n      出门戴口罩，避免使用公共交通工具，选择安全的出行方式，在感染风险较高的情况下要注意自我保护。" disableDefaultPadding="{{true}}" disabled />
-            </view>
+        <view class="overallcircle">
+          <t-progress theme="circle" percentage='{{room.percentage}}' label='{{room.grade}}' color='{{room.color}}' stroke-width='1px'></t-progress>
+          所在场所感染风险
         </view>
-        <t-divider />
-        <view class='showdetail card'>
-            <t-tabs defaultValue="{{tabvalue}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs" t-class-content="custom-panel" animation='duration:3'>
-                <t-tab-panel label="哨点信息" value="0" style="{{tabPanelstyle}}">
-                    <t-cell title="确诊信息" leftIcon='radar' />
-                    <t-row>
-                        <t-col span="12" class="detailcard">
-                            <view class="dataname">全球确诊</view>
-                            <view class="roomdata">12894562</view>
-                            <view class="dataname">较昨日 -154879</view>
-                        </t-col>
-                        <t-col span="12" class="detailcard">
-                            <view class="dataname">国内感染</view>
-                            <view class="roomdata">1398754</view>
-                            <view class="dataname">较昨日 -15329</view>
-                        </t-col>
-                    </t-row>
-                    <t-cell title="地图数据" leftIcon='map-information' />
-                    <view class="mapcontainer" wx:if="{{tabvalue==0}}">
-                        <view class="container">
-                            <!-- <view>
+      </view>
+      <t-cell title="提示" leftIcon='notification' />
+      <view class='overalladvice'>
+        <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较高.\n      出门戴口罩，避免使用公共交通工具，选择安全的出行方式，在感染风险较高的情况下要注意自我保护。" disableDefaultPadding="{{true}}" disabled />
+      </view>
+    </view>
+    <t-divider />
+    <view class='showdetail card'>
+      <t-tabs defaultValue="{{tabvalue}}" bind:change="onTabsChange" bind:click="onTabsClick" t-class="custom-tabs" t-class-content="custom-panel" animation='duration:3'>
+        <t-tab-panel label="哨点信息" value="0" style="{{tabPanelstyle}}">
+          <t-cell title="确诊信息" leftIcon='radar' />
+          <t-row>
+            <t-col span="12" class="detailcard">
+              <view class="dataname">全球确诊</view>
+              <view class="roomdata">12894562</view>
+              <view class="dataname">较昨日 -154879</view>
+            </t-col>
+            <t-col span="12" class="detailcard">
+              <view class="dataname">国内感染</view>
+              <view class="roomdata">1398754</view>
+              <view class="dataname">较昨日 -15329</view>
+            </t-col>
+          </t-row>
+          <t-cell title="全国数据" leftIcon='map-information' />
+          <view class="mapcontainer" wx:if="{{tabvalue==0}}">
+            <view class="container">
+              <!-- <view>
     <text>温度：{{temperature}} 湿度：{{humidity}} 二氧化碳浓度：{{CO2}}</text>
     <text>datas:{{datas}}</text>
   </view> -->
-                            <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{ecMap}}"></ec-canvas>
-                        </view>
-                    </view> 
-                    <!-- <t-progress percentage='{{place.percentage}}' label='1000000' />
+              <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{ecMap}}"></ec-canvas>
+            </view>
+          </view>
+          <!-- <t-progress percentage='{{place.percentage}}' label='1000000' />
                     <t-progress theme="plump" percentage="80" label='1000000' />
                     <t-progress theme="plump" percentage="80" label='1000000' /> -->
-                </t-tab-panel>
-                <t-tab-panel label="省份信息" value="1" style="{{tabPanelstyle}}">{{city}}</t-tab-panel>
-                <t-tab-panel label="场所信息" value="2" style="{{tabPanelstyle}}">
-                    <t-cell title="环境数据" leftIcon='houses' />
-                    <t-row>
-                        <t-col span="8" class="detailcard" t-class="good">
-                            <view class="roomdata">25℃</view>
-                            <view class="dataname">温度</view>
-                        </t-col>
-                        <t-col span="8" class="detailcard" t-class="ok">
-                            <view class="roomdata">44%</view>
-                            <view class="dataname">湿度</view>
-                        </t-col>
-                        <t-col span="8" class="detailcard" t-class="high">
-                            <view class="roomdata">1211ppm</view>
-                            <view class="dataname">CO2浓度</view>
-                        </t-col>
-                    </t-row>
-                    <t-row>
-                        <t-col span="12" class="detailcard" t-class="ok">
-                            <view class="roomdata">较低</view>
-                            <view class="dataname">感染风险值</view>
-                        </t-col>
-                        <t-col span="12" class="detailcard" t-class="mid">
-                            <view class="roomdata">中等</view>
-                            <view class="dataname">防范等级</view>
-                        </t-col>
-                    </t-row>
-                    <t-cell title="提示" leftIcon='notification' />
-                    <view class='overalladvice'>
-                        <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较高.\n      出门戴口罩，避免使用公共交通工具，选择安全的出行方式，在感染风险较高的情况下要注意自我保护。" disableDefaultPadding="{{true}}" disabled />
-                    </view>
-                </t-tab-panel>
-            </t-tabs>
-        </view>
+        </t-tab-panel>
+        <t-tab-panel label="省份信息" value="1" style="{{tabPanelstyle}}">{{city}}
+          <t-cell title="确诊信息" leftIcon='radar' />
+          <t-row>
+            <t-col span="12" class="detailcard">
+              <view class="dataname">全国感染</view>
+              <view class="roomdata">13987542</view>
+              <view class="dataname">较昨日 -15329</view>
+            </t-col>
+            <t-col span="12" class="detailcard">
+              <view class="dataname">省内感染</view>
+              <view class="roomdata">46284</view>
+              <view class="dataname">较昨日 -3457</view>
+            </t-col>
+          </t-row>
+          <t-cell title="省内数据" leftIcon='map-information' />
+          <view class="mapcontainer" wx:if="{{tabvalue==1}}">
+            <view class="container">
+              <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{SDMap}}"></ec-canvas>
+            </view>
+          </view>
+        </t-tab-panel>
+        <t-tab-panel label="场所信息" value="2" style="{{tabPanelstyle}}">
+          <t-cell title="环境数据" leftIcon='houses' />
+          <t-row>
+            <t-col span="8" class="detailcard" t-class="good">
+              <view class="roomdata">25℃</view>
+              <view class="dataname">温度</view>
+            </t-col>
+            <t-col span="8" class="detailcard" t-class="ok">
+              <view class="roomdata">44%</view>
+              <view class="dataname">湿度</view>
+            </t-col>
+            <t-col span="8" class="detailcard" t-class="high">
+              <view class="roomdata">1211ppm</view>
+              <view class="dataname">CO2浓度</view>
+            </t-col>
+          </t-row>
+          <t-row>
+            <t-col span="12" class="detailcard" t-class="ok">
+              <view class="roomdata">较低</view>
+              <view class="dataname">感染风险值</view>
+            </t-col>
+            <t-col span="12" class="detailcard" t-class="mid">
+              <view class="roomdata">中等</view>
+              <view class="dataname">防范等级</view>
+            </t-col>
+          </t-row>
+          <t-cell title="提示" leftIcon='notification' />
+          <view class='overalladvice'>
+            <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较高.\n      出门戴口罩，避免使用公共交通工具，选择安全的出行方式，在感染风险较高的情况下要注意自我保护。" disableDefaultPadding="{{true}}" disabled />
+          </view>
+        </t-tab-panel>
+      </t-tabs>
     </view>
-    <view>
-        <t-footer text="{{footerText}}" links="{{links}}"></t-footer>
-        <t-footer text="{{footerText2}}"></t-footer>
-    </view>
+  </view>
+  <view>
+    <t-footer text="{{footerText}}" links="{{links}}"></t-footer>
+    <t-footer text="{{footerText2}}"></t-footer>
+  </view>
 </scroll-view>
