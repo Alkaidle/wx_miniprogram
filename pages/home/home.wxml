@@ -41,5 +41,5 @@
   <view>
     <text>Map:</text>
   </view>
-  <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{ecMap}}"></ec-canvas>
+  <ec-canvas id="Chinese-map" canvas-id="myChinese-map" ec="{{SDMap}}"></ec-canvas>
 </view>

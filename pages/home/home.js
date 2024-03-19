@@ -1,5 +1,6 @@
 import * as echarts from '../../ec-canvas/echarts';
 import geoJson from './mapData.js';
+import SDJson from './shandong.js'
 const app=getApp();
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
 const base64=require('../../utils/base64.modified.js');
@@ -19,8 +20,11 @@ Page({
         // humidity: '',
         // CO2: '',
         // datas: {},
-        ecMap: {
+        CNMap: {
             onInit: initChartMap
+        },
+        SDMap: {
+            onInit: initShandongMap
         },
     },
     onLoad: function() {
@@ -203,7 +207,7 @@ function initChartMap(canvas, width, height) {
             8,  // 下
             15, // 左
           ],
-        //   extraCssText: 'box-shadow: 2px 2px 10px rgba(21, 126, 245, 0.35);',
+        //   extraCssText: 'box-shadow: 2px 2px 10px rgba(21, 126, 245, 0.randomData());',
         //   textStyle: {
         //     fontFamily: "'Microsoft YaHei', Arial, 'Avenir', Helvetica, sans-serif",
         //     color: '#005dff',
@@ -218,7 +222,7 @@ function initChartMap(canvas, width, height) {
             roam: false, // 可以缩放和平移
             aspectScale: 0.78, // 宽高比
             layoutCenter: ["50%", "38%"], // position位置
-            layoutSize: 370, // 地图大小，保证了不超过 370x370 的区域
+            layoutSize: 300, // 地图大小，保证了不超过 370x370 的区域
             label: {
               // 图形上的文本标签
               normal: {
@@ -333,3 +337,141 @@ function initChartMap(canvas, width, height) {
     console.log("init finish!");
     return myMap;
 }
+
+function initShandongMap(canvas, width, height) {
+    const chart = echarts.init(canvas, null, {
+      width: width,
+      height: height,
+    });
+    canvas.setChart(chart);
+    echarts.registerMap('shandong', SDJson);
+    
+    const option = {
+        tooltip: {
+          trigger: 'item',
+          // backgroundColor: "white",
+          padding: [
+            10,  // 上
+            15, // 右
+            8,  // 下
+            15, // 左
+          ],
+          formatter: `{b} :  {c}确诊`
+        },
+        geo: [
+          {
+            // 地理坐标系组件
+            map: "shandong",
+            roam: false, // 可以缩放和平移
+            aspectScale: 0.78, // 宽高比
+            layoutCenter: ["50%", "40%"], // position位置
+            layoutSize: 280, // 地图大小，保证了不超过 370x370 的区域
+            label: {
+              // 图形上的文本标签
+              normal: {
+                show: true,
+                textStyle: {
+                  color: "rgba(83, 83, 83, 0.9)",
+                  fontSize: '8.5',
+                  fontWeight: 'bold',
+                  textBorderColor: '#fff',
+                  textBorderWidth: 0.24,
+                }
+              },
+              emphasis: { // 高亮时样式
+                color: "#333",
+                textStyle: {
+                  color: "rgba(83, 83, 83, 0.9)",
+                  fontSize: '8.5',
+                  fontWeight: 'bold',
+                  textBorderColor: '#fff',
+                  textBorderWidth: 0.24,
+                }
+              }
+            },
+            itemStyle: {
+              // 图形上的地图区域
+              normal: {
+                borderColor: "rgba(0,0,0,0.2)",
+                areaColor: "#005dff"
+              },
+              emphasis: {
+                show: false
+              },
+            }
+          }
+        ],
+        toolbox: {
+          show: false,
+          orient: 'vertical',
+          left: 'right',
+          top: 'center',
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {}
+          }
+        },
+        visualMap: {
+          min: 800,
+          max: 50000,
+          text: ['高', '低'],
+          realtime: true,
+          orient: 'horizontal',
+          left:'center',
+          top:'280',
+          calculable: false,
+          inRange: {
+            color: ['lightskyblue', 'yellow', 'orangered']
+          }
+        },
+        series: [
+          {
+            type: 'map',
+            mapType: 'shandong',
+            geoIndex: 0,
+            roam: false, // 鼠标是否可以缩放
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                  areaColor: '#fbfbfb',
+                  borderColor: '#b9b4b7'
+                },
+                emphasis: {
+                //   areaColor: '#389BB7',
+                  // borderWidth: 0
+                  show: false
+                }
+              },
+            animation: true,
+        data: [//数据
+            { name: '济南市', value: randomData() },
+            { name: '青岛市', value: randomData() },
+            { name: '德州市', value: randomData() },
+            { name: '淄博市', value: randomData() },
+            { name: '潍坊市', value: randomData() },
+            { name: '日照市', value: randomData() },
+            { name: '济宁市', value: randomData() },
+            { name: '菏泽市', value: randomData() },
+            { name: '烟台市', value: randomData() },
+            { name: '威海市', value: randomData() },
+            { name: '泰安市', value: randomData() },
+            { name: '临沂市', value: randomData() },
+            { name: '枣庄市', value: randomData() },
+            { name: '滨州市', value: randomData() },
+            { name: '东营市', value: randomData() },
+            { name: '莱芜市', value: randomData() },
+            { name: '聊城市', value: randomData() }
+          ]
+        }],
+    }
+    chart.setOption(option);
+    return chart;
+  }
