@@ -3,10 +3,14 @@ import * as echarts from '../../ec-canvas/echarts';
 import geoJson from './mapData.js';
 import SDJson from './shandong.js'
 import QQMapWX from '../../utils/qqmap-wx-jssdk.min.js'; //引入SDK文件
+const base64=require('../../utils/base64.modified.js');
+const appKey='Ud_t9LASR';
+const appSecret='a3be567dde8811ee8fe012c7de235200';
+const tokenEndpoint='https://oauth.cleargrass.com/oauth2/token';
 var qqmapsdk;
 Component({
   //
-  lifetimes: {
+   lifetimes: {
     attached() {
       // 在组件被插入到页面时执行的操作
       console.log('Custom component attached to page');
@@ -22,7 +26,8 @@ Component({
       this.setData({
         room: room0,
         place: place0
-      })
+      });
+      this.getAccessToken();
     }
   },
 
@@ -64,6 +69,10 @@ Component({
       { label: '澳门特别行政区', value: '澳门特别行政区' }
     ],
     province: '',
+    risk: '',
+    temperature: '',
+    humidity: '',
+    CO2: '',
     backTopTheme: 'round',
     backTopText: '顶部',
     footerText: '由 X-Hunter 创业项目研发',
@@ -240,6 +249,104 @@ Component({
         }
       });
     },
+
+    ////////////
+    getAccessToken: function() {
+      let _this=this;
+      wx.request({
+          url: tokenEndpoint,
+          method: 'POST',
+          header: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': 'Basic ' + base64.encode(appKey + ':' + appSecret),
+          },
+          data: {
+              grant_type: 'client_credentials',
+              scope: 'device_full_access'
+          },
+          success: function(res) {
+              var accessToken=res.data.access_token;
+              _this.getData(accessToken);
+              console.log('getAccessToken Success!');
+          },
+          fail: function(err) {
+              console.error('Failed to get Access Token:', err);
+          }
+      })
+    },
+    getData: function(accessToken) {
+      let _this=this;
+      let currentTimestampMs = Date.now();
+      let start_time = currentTimestampMs;
+      let end_time= currentTimestampMs;
+      wx.request({
+          url: 'https://apis.cleargrass.com/v1/apis/devices',
+          method: 'GET',
+          header: {
+              'Authorization': 'Bearer ' + accessToken
+          },
+          data: {
+            // "mac": "582D34831846",  
+            // "start_time": start_time,
+            // "end_time": end_time,
+            // "report_interval": 10,
+            // "collect_interval": 10,
+            "timestamp": currentTimestampMs,
+          },
+          success: function(res) {
+            //   console.log('res:',res);
+              console.log('data:',res.data.devices[0].data);
+              let data=res.data.devices[0].data;
+              let temperature=data.temperature.value;
+              let humidity=data.humidity.value;
+              let co2=data.co2.value;
+              let risk=_this.calculate_P(temperature,humidity,co2);
+              risk=risk.toFixed(4);
+              _this.setData({
+                  temperature: temperature,
+                  humidity: humidity,
+                  co2: co2,
+                  risk: risk,
+              });
+              console.log('getData Success!');
+          },
+          fail: function(err) {
+              console.error('Request failed:',err);
+          }
+      });
+    },
+
+  /////////////
+
+    calculate_q: function(T,humidity) {
+      //calculate RRT
+      let RRT=1.04438732 - 0.00324074*T + 0.00003541*T*T;
+    //   console.log('RRT:',RRT);
+      //calculate AH
+      let AH=humidity*0.01*(0.0003*T*T*T+0.0105*T*T+0.3034*T+4.8083);
+    //   console.log('AH:',AH);
+      //calculate RRA
+      let RRA=1.05357512 - 0.00662768*AH + 0.00017749*AH*AH;
+    //   console.log('RRA:',RRA);
+      //calculate R_t
+      let R_t=7*RRT*RRA; //R_0=7
+    //   console.log('R_t:',R_t);
+
+      let A=-30.27958,B1=-44.81536,B2=19.67934;
+      let q=A+B1*R_t+B2*R_t*R_t;
+    //   console.log('q:',q);
+      return q;
+    },
+    calculate_P: function(T,humidity,CO2) {
+      let C=CO2,C_a=0.038,C_0=420,t=1;
+      let x=-(C-C_0)/C_a*t*this.calculate_q(T,humidity)*1e-6;
+    //   console.log('x:',x);
+      let P=1-Math.exp(x*0.05);
+    //   console.log('感染风险P:',P);
+      return P;
+    }
+
+  //methods end
   },
 });
 function randomData() {
@@ -534,3 +641,4 @@ function initShandongMap(canvas, width, height) {
   chart.setOption(option);
   return chart;
 }
+

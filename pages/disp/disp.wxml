@@ -6,8 +6,8 @@
   <t-back-top theme="{{backTopTheme}}" text="{{backTopText}}" scroll-top="{{scrollTop}}" bind:to-top="onToTop"></t-back-top>
   <view class="container">
   
-    <t-sticky class="cityselector card" offset-top="{{ 88 }}">
-    <view >
+
+    <view class="cityselector card">
       
       <t-cell class="mb-16" title="我的省份" arrow hover note="{{provinceText}}" bind:click="onCityPicker" />
       <t-picker visible="{{cityVisible}}" value="{{cityValue}}" data-key="province" title="选择省份" cancelBtn="取消" confirmBtn="确认" bindchange="onPickerChange" bindpick="onColumnChange" bindcancel="onPickerCancel">
@@ -15,7 +15,6 @@
       </t-picker>
     
     </view>
-  </t-sticky>
   
     <view class='overall card'>
       <view class='title'>
@@ -92,21 +91,21 @@
           <t-cell title="环境数据" leftIcon='houses' />
           <t-row>
             <t-col span="8" class="detailcard" t-class="good">
-              <view class="roomdata">25℃</view>
+              <view class="roomdata">{{temperature}}℃</view>
               <view class="dataname">温度</view>
             </t-col>
             <t-col span="8" class="detailcard" t-class="ok">
-              <view class="roomdata">44%</view>
+              <view class="roomdata">{{humidity}}%</view>
               <view class="dataname">湿度</view>
             </t-col>
             <t-col span="8" class="detailcard" t-class="high">
-              <view class="roomdata">1211ppm</view>
+              <view class="roomdata">{{co2}}ppm</view>
               <view class="dataname">CO2浓度</view>
             </t-col>
           </t-row>
           <t-row>
             <t-col span="12" class="detailcard" t-class="ok">
-              <view class="roomdata">较低</view>
+              <view class="roomdata">{{risk}}</view>
               <view class="dataname">感染风险值</view>
             </t-col>
             <t-col span="12" class="detailcard" t-class="mid">
