@@ -22,7 +22,11 @@ Component({
     },
     ready() {
       let place0 = this.GetColorAndGrade(60);
-      let room0 = this.GetColorAndGrade(80);
+      let room0 = this.GetColorAndGrade(2);
+      this.setData({ enable: true });
+    setTimeout(() => {
+      this.setData({ enable: false });
+    }, 1000);
       this.setData({
         room: room0,
         place: place0
@@ -32,6 +36,13 @@ Component({
   },
 
   data: {
+    enable: false,
+    loadingProps: {
+      size: '50rpx',
+    },
+    rowCol1: [{ width: '100%', height: '342rpx', borderRadius: '24rpx' }],
+    rowCol2: [[{ width: '327rpx' }], [{ width: '200rpx' }], [{ size: '327rpx', borderRadius: '24rpx' }]],
+    scrollTop: 0,
     tabvalue:0,
     provinceText: '定位中',
     provinceValue: [],
@@ -73,6 +84,11 @@ Component({
     temperature: '',
     humidity: '',
     CO2: '',
+    tGrade: '',
+    co2Grade:'',
+    huGrade:'',
+    riskGrade:'',
+    room1:'',
     backTopTheme: 'round',
     backTopText: '顶部',
     footerText: '由 X-Hunter 创业项目研发',
@@ -93,6 +109,17 @@ Component({
     scrollTop: { type: Number, value: 0 },
   },
   methods: {
+    onRefresh() {
+      this.setData({ enable: true });
+      setTimeout(() => {
+        this.setData({ enable: false });
+      }, 1500);
+      this.getAccessToken();
+    },
+    onScroll(e) {
+      const { scrollTop } = e.detail;
+      this.setData({ scrollTop });
+    },
     onColumnChange(e) {
       console.log('picker pick:', e);
     },
@@ -274,11 +301,13 @@ Component({
           }
       })
     },
+    
     getData: function(accessToken) {
       let _this=this;
       let currentTimestampMs = Date.now();
       let start_time = currentTimestampMs;
       let end_time= currentTimestampMs;
+      let room1='';
       wx.request({
           url: 'https://apis.cleargrass.com/v1/apis/devices',
           method: 'GET',
@@ -301,13 +330,27 @@ Component({
               let humidity=data.humidity.value;
               let co2=data.co2.value;
               let risk=_this.calculate_P(temperature,humidity,co2);
-              risk=risk.toFixed(4);
+              
+              risk=Math.round(risk*100);
+              let room1 = _this.GetColorAndGrade(risk);
+               let tG=getGrade(temperature,0);
+               let hG=getGrade(humidity,1);
+               let cG=getGrade(co2,2);
+               let rG=getGrade(risk,3);
+               let rL=getGrade(60,4);
               _this.setData({
                   temperature: temperature,
                   humidity: humidity,
                   co2: co2,
                   risk: risk,
+                   tGrade:tG,
+                   huGrade:hG,
+                   co2Grade:cG,
+                   riskGrade:rG,
+                   room:room1,
+                   
               });
+              
               console.log('getData Success!');
           },
           fail: function(err) {
@@ -503,6 +546,40 @@ function initChartMap(canvas, width, height) {
   myMap.setOption(option);
   console.log("init finish!");
   return myMap;
+}
+function getGrade(data,need){
+  if(need==0)
+  {
+    if(data<15||data>32) return 'high';
+    if((data>=15&&data<18)||(data<=32&&data>28)) return 'mid';
+    if((data>=18&&data<20)||(data>=25&&data<=28)) return 'ok';
+    if((data>=20&&data<25)) return 'good';
+  }
+  if(need==1)
+  {
+    if(data<20||data>80) return 'high';
+    if((data>=20&&data<30)||(data<=80&&data>70)) return 'mid';
+    if((data>=30&&data<40)||(data>=60&&data<=70)) return 'ok';
+    if((data>=40&&data<60)) return 'good';
+  }
+  if(need==2)
+  {
+    if(data>1000) return 'high';
+    else if(data>800) return 'mid';
+    else if(data>600) return 'ok';
+    else return 'good';
+  }
+  if(need==3)
+  {
+    if(data>70) return 'high';
+    else if(data>50) return 'mid';
+    else if(data>20) return 'ok';
+    else return 'good';
+  }
+  if(need==4)
+  {
+    return 'mid';
+  }
 }
 function initShandongMap(canvas, width, height) {
   const chart = echarts.init(canvas, null, {
