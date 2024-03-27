@@ -38,8 +38,14 @@
         </view>
       </view>
       <t-cell title="提示" leftIcon='notification' />
-      <view class='overalladvice'>
+      <view class='overalladvice' wx:if="{{risk>=70}}">
         <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较高.\n      出门戴口罩，避免使用公共交通工具，选择安全的出行方式，在感染风险较高的情况下要注意自我保护。" disableDefaultPadding="{{true}}" disabled />
+      </view>
+      <view class='overalladvice' wx:if="{{risk>30&&risk<70}}">
+        <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险中等.\n      出现任何不适症状时，及时就医并积极配合医疗观察，在感染风险中等的情况下要及时关注身体状况。" disableDefaultPadding="{{true}}" disabled />
+      </view>
+      <view class='overalladvice' wx:if="{{risk<=30}}">
+        <t-textarea t-class="external-class" placeholder="请输入文字" value="您所在的场所的新冠肺炎感染风险较低.\n      在目前感染风险较低的情况下，继续保持良好的个人卫生习惯，经常洗手并使用洗手液。保持社交距离，尽量与他人保持1米以上的距离。" disableDefaultPadding="{{true}}" disabled />
       </view>
     </view>
     <t-divider />
